@@ -12,6 +12,8 @@ public class PlayerControl : MonoBehaviour {
 	private GameObject[] platforms;
 	private bool zPosition = true;
 
+	private Vector3 positionBeforeJump;
+
 	// Use this for initialization
 	void Start () {
 		grounded = true;
@@ -28,6 +30,7 @@ public class PlayerControl : MonoBehaviour {
 		float verticallMovement = 0f;
 
 		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded) {
+			positionBeforeJump = transform.position;
 			verticallMovement = 1f * jumpSpeed;
 			grounded = false;
 		}
@@ -41,6 +44,11 @@ public class PlayerControl : MonoBehaviour {
 		{
 			grounded = true;
 			UpdatePlayerPositionInTheWorld (other);
+		}
+
+		if (other.gameObject.CompareTag ("Respawn"))
+		{
+			transform.position = positionBeforeJump;
 		}
 	}
 
