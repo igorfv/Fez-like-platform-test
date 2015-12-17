@@ -18,13 +18,11 @@ public class PlayerControl : MonoBehaviour {
 		rb = GetComponent<Rigidbody> ();
 
 		platforms = GameObject.FindGameObjectsWithTag("Platform");
-
-		UpdatePlatformBoxCollider ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-//		UpdatePlatformBoxCollider ();
+		UpdatePlatformBoxCollider ();
 
 		float horizontalMovement = Input.GetAxis ("Horizontal") * movementSpeed * Time.deltaTime;
 		float verticallMovement = 0f;
@@ -42,6 +40,7 @@ public class PlayerControl : MonoBehaviour {
 		if (other.gameObject.CompareTag ("Platform"))
 		{
 			grounded = true;
+			UpdatePlayerPositionInTheWorld (other);
 		}
 	}
 
@@ -64,5 +63,18 @@ public class PlayerControl : MonoBehaviour {
 			collider.center = collider.transform.InverseTransformPoint(colliderCenter);
 
 		}
+	}
+
+
+	void UpdatePlayerPositionInTheWorld (Collider platform) {
+		Vector3 playerPosition;
+
+		if (zPosition) {
+			playerPosition = new Vector3 (transform.position.x, transform.position.y, platform.transform.position.z);
+		} else {
+			playerPosition = new Vector3 (platform.transform.position.x, transform.position.y, transform.position.z);
+		}
+
+		transform.position = playerPosition;
 	}
 }
